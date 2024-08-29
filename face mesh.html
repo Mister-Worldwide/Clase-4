@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧙 Face mesh</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  <script src="https://unpkg.com/ml5@1/dist/ml5.min.js"></script>
+  <Link rel="Stylesheet" href="style.css">
+</head>
+
+
+
+<body>
+  <header>
+    <p>
+      <a href="index.html">Bienvenide</a>
+      <a href="body pose.html">Body pose </a>
+      <a href="face mesh.html" class="activo">Face mesh </a>
+      <a href="hand pose.html">Hand pose </a>
+      <a href="body segmentation.html">Body segmentation </a>
+
+    </p>
+    <h1>Face mesh</h1>
+  </header>
+  <main></main>
+
+  <script>
+    let faceMesh;
+    let video;
+    let faces = [];
+    let options = { maxFaces: 1, refineLandmarks: false, flipHorizontal: false };
+
+    function preload() {
+      faceMesh = ml5.faceMesh(options);
+    }
+
+    function setup() {
+      createCanvas(640, 480);
+      background('#4DB6AC');
+      video = createCapture(VIDEO);
+      video.size(640, 480);
+      video.hide();
+      faceMesh.detectStart(video, gotFaces);
+    }
+
+    function draw() {
+      image(video, 0, 0, width, height);
+      tint ('#FA1E4E')
+
+      for (let i = 0; i < faces.length; i++) {
+        let face = faces[i];
+        for (let j = 0; j < face.keypoints.length; j++) {
+          let keypoint = face.keypoints[j];
+          fill('#76D7C4');
+          noStroke();
+          circle(keypoint.x, keypoint.y, 5);
+        }
+      }
+    }
+
+    function gotFaces(results) {
+      faces = results;
+    }
+
+  </script>
+
+</body>
+
+</html>
